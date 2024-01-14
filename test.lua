@@ -14,6 +14,8 @@ Handlers.add(
     Handlers.utils.hasMatchingTag("Action", "Get-token-price"),
     function(msg)
         assert(type(msg.Tags.TokenName) == "string", "Token Name for fetching price is required")
+
+        -- TODO: Only send the following if the token name array have something new which is not already in the Rates table
         ao.send({
             Target = "DIf3hBBaJEaDlmljqgKue5JfXnySwr2vq0CdPnmMuIU",
             Tags = {
