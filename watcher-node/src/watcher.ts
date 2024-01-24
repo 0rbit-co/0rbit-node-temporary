@@ -1,7 +1,7 @@
 import axios from "axios"
 import { readFileSync } from 'fs';
 import * as cron from 'node-cron';
-import { example, final, COINIDS } from "./utils/constant"
+import { example, getPrice, COINIDS, getData } from "./utils/constant"
 import { createDataItemSigner, message } from "@permaweb/ao-connect";
 
 const wallet = JSON.parse(
@@ -39,6 +39,46 @@ const getTokenData = async (tokenArr: string[]) => {
     } catch (error: any) {
         console.error(error);
     }
+}
+
+const fetchAndSendData = async (arr: any) => {
+    let processId = '';
+    arr.forEach((item: any) => {
+        item.node.tags.forEach(async (tag: any) => {
+            if (tag.name === 'From-Process') processId = tag.value
+            if (tag.name === "Token") {
+                // Parse the value as JSON array and add each token to the set
+                try {
+                    console.log(processId)
+                    const { headers, data } = await axios.get(tag.value)
+                    console.log(headers['content-type'])
+                    // if (headers['content-type'].includes('application/json')) {
+                    //     console.info(
+                    //         await message({
+                    //             process: processId,
+                    //             signer: createDataItemSigner(wallet),
+                    //             tags: [{ name: "Action", value: "Recieve-data-feed" }, { name: "Content-Type", value: headers['content-type'] }],
+                    //             data: JSON.stringify(data)
+                    //         })
+                    //     )
+                    // }
+                    // else 
+                    {
+                        console.info(
+                            await message({
+                                process: processId,
+                                signer: createDataItemSigner(wallet),
+                                tags: [{ name: "Action", value: "Recieve-data-feed" }, { name: "Content-Type", value: headers['content-type'] }],
+                                data: data
+                            })
+                        )
+                    }
+                } catch (e) {
+                    console.log("error for token:", e)
+                }
+            }
+        });
+    });
 }
 
 function extractUniqueTokens(arr: any): string[] {
@@ -145,8 +185,20 @@ const postDataToAos = async (processId: string, data: any) => {
     )
 }
 
+const postFetchedDataToAos = async (processId: string, data: any, headers: any) => {
+
+    console.info(
+        await message({
+            process: processId,
+            signer: createDataItemSigner(wallet),
+            tags: [{ name: "Action", value: "Recieve-token-prices" }, { name: "Content-Type", value: headers['content-type'] }],
+            data: data
+        })
+    )
+}
+
 const priceFeedOracle = async () => {
-    const { result, data } = await queryFromArweave(final)
+    const { result, data } = await queryFromArweave(getPrice)
     if (!result) throw "No data to get price feed"
     const tokens = extractUniqueTokens(data)
     const priceFeed = await getTokenData(tokens)
@@ -160,11 +212,20 @@ const priceFeedOracle = async () => {
     )
 }
 
+const fetchDataOracle = async () => {
+    const { result, data } = await queryFromArweave(getData)
+    if (!result) throw "No data to fetch"
+    await fetchAndSendData(data);
+}
+(async () => {
+    await fetchDataOracle()
+})()
 // Schedule the task to run every 30 seconds
-cron.schedule('*/30 * * * * *', async () => {
-    try {
-        await priceFeedOracle();
-    } catch (error) {
-        console.error("Error occured in cron:", error)
-    }
-});
+// cron.schedule('*/30 * * * * *', async () => {
+//     try {
+//         await priceFeedOracle();
+//         await fetchDataOracle();
+//     } catch (error) {
+//         console.error("Error occured in cron:", error)
+//     }
+// });
