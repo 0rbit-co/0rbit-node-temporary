@@ -52,18 +52,17 @@ const fetchAndSendData = async (arr: any) => {
                     console.log(processId)
                     const { headers, data } = await axios.get(tag.value)
                     console.log(headers['content-type'])
-                    // if (headers['content-type'].includes('application/json')) {
-                    //     console.info(
-                    //         await message({
-                    //             process: processId,
-                    //             signer: createDataItemSigner(wallet),
-                    //             tags: [{ name: "Action", value: "Recieve-data-feed" }, { name: "Content-Type", value: headers['content-type'] }],
-                    //             data: JSON.stringify(data)
-                    //         })
-                    //     )
-                    // }
-                    // else 
-                    {
+                    if (headers['content-type'].includes('application/json')) {
+                        console.info(
+                            await message({
+                                process: processId,
+                                signer: createDataItemSigner(wallet),
+                                tags: [{ name: "Action", value: "Recieve-data-feed" }, { name: "Content-Type", value: headers['content-type'] }],
+                                data: JSON.stringify(data)
+                            })
+                        )
+                    }
+                    else {
                         console.info(
                             await message({
                                 process: processId,
