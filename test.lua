@@ -30,15 +30,25 @@ Handlers.add(
 Handlers.add(
     "getData",
     Handlers.utils.hasMatchingTag("Action", "Get-real-data"),
-    function(msg)
-        assert(type(msg.Tags.Url) == "string", "Token Name for fetching price is required")
+    function(Msg)
+        local url = Msg.Tags.Url
+        local from = Msg.Tags.From
+        print(from)
+        assert(type(url) == "string", "Url to fetch data is required")
         ao.send({
-            Target = "DIf3hBBaJEaDlmljqgKue5JfXnySwr2vq0CdPnmMuIU",
+            Target = "_186uLmdemgvCaHJ-eHrdrCSPEOU4AWeLr5sHTd7g7M",
             Tags = {
                 Action = "Get-Data",
-                Url = msg.Tags.Url
+                Url = url,
+                RequestedBy = from
             }
         })
+        ao.log({
+            Message = "Request orbit node to fetch url.",
+            Url = url,
+            Recipient = from
+        })
+        Handlers.utils.reply("Recieved request from" .. from .. "to" .. url)(Msg)
     end
 )
 
@@ -65,8 +75,8 @@ Send({
 })
 
 Send({
-    Target = ao.id,
-    Tags = { Action = "Get-real-data", Url = "https://my-json-server.typicode.com/typicode/demo/posts" }
+    Target = "IgEHdxGWDDGMj7Pp3b4oUaIyWI9yaM5ri_5rXqtA8Gk",
+    Action = "Get-real-data", Url = "https://dummyjson.com/products"
 })
 
 local json = require("json")
@@ -87,3 +97,7 @@ Handlers.add(
     Handlers.utils.hasMatchingTag("Action", "Cyclic-request"),
     Handlers.utils.reply("Action", "Cyclic-request")),
 )
+
+tracing: curl "https://ao-mu-1.onrender.com/?debug=true&process=IgEHdxGWDDGMj7Pp3b4oUaIyWI9yaM5ri_5rXqtA8Gk"
+
+

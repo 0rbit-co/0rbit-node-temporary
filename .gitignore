@@ -1,2 +1,5 @@
 node_modules
 wallet.json
+dist
+seed.json
+.env
