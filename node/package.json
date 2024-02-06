@@ -1,0 +1,27 @@
+{
+  "name": "node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "dev": "nodemon dist/index.js",
+    "dev:watch": "tsc -w"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@permaweb/ao-connect": "^0.0.27",
+    "axios": "^1.6.7",
+    "dotenv": "^16.4.1",
+    "node-cron": "^3.0.3",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "@types/axios": "^0.14.0",
+    "@types/node": "^20.11.16",
+    "typescript": "^5.3.3"
+  }
+}
