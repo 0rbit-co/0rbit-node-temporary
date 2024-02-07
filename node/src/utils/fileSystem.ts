@@ -14,11 +14,11 @@ export const getDataFromFile = () => {
 };
 
 // Function to save the previous cursor value to a JSON file
-export const saveDataToFile = (data: Record<string, any>) => {
+export const saveDataToFile = async (data: Record<string, any>) => {
     try {
-        const filePath = path.join(__dirname, '../../db/data.json')
-        fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+        const filePath = path.join(__dirname, '../../db/data.json');
+        await fs.promises.writeFile(filePath, JSON.stringify(data, null, 2));
     } catch (error) {
-        throw error
+        throw error;
     }
 };

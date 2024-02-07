@@ -12,8 +12,8 @@ export function getDataQuery(afterCursor?: string) {
     {name: "Data-Protocol", values:["ao"]},
       {name: "Variant", values:["ao.TN.1"]},
       {name: "Action", values: ["Get-Data"]},
-    ],first:1, ${afterClause}
-    sort:HEIGHT_DESC) {
+    ],first:100, ${afterClause}
+    sort:HEIGHT_ASC) {
     pageInfo{
       hasNextPage
     }

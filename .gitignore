@@ -3,3 +3,4 @@ wallet.json
 dist
 seed.json
 .env
+tsconfig.tsbuildinfo

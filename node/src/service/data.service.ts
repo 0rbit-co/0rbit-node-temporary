@@ -4,6 +4,11 @@ import { WALLET_FILE } from "./../constants/vars";
 import { StructuredEdge } from "./../types/utils.types";
 import { message } from "@permaweb/ao-connect";
 
+function isValidUrl(url: string): boolean {
+    const pattern: RegExp = /^(ftp|http|https):\/\/[^ "]+$/;
+    return pattern.test(url);
+}
+
 export const fetchAndSendData = async (edges: StructuredEdge[]) => {
     try {
         const processData = async (item: { [key: string]: string }) => {
@@ -11,8 +16,17 @@ export const fetchAndSendData = async (edges: StructuredEdge[]) => {
             const url = item['Url'];
 
             if (!url) return;
-
             try {
+
+                if (!isValidUrl(url)) {
+                    return message({
+                        process: processId || '4meJi6y2GrT1waJOfVIIonb23G72brFWYWevkSk1ipE',
+                        signer: createDataItemSigner(WALLET_FILE),
+                        tags: [{ name: "Action", value: "Receive-data-feed" }, { name: "Content-Type", value: "text/html" }],
+                        data: "The url is no valid."
+                    });
+                }
+
                 const { headers, data } = await axios.get(url);
 
                 const messageData = {
@@ -27,9 +41,10 @@ export const fetchAndSendData = async (edges: StructuredEdge[]) => {
             }
         };
 
-        return await Promise.all(edges.map(async (item) => {
+        const res = await Promise.all(edges.map(async (item) => {
             return processData(item.tags)
         }));
+        return res;
     } catch (error) {
         console.error("Error processing data:", error);
         throw error

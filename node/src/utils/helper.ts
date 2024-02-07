@@ -4,6 +4,7 @@ import { getDataQuery } from "../constants/query";
 
 
 export const getStructuredEdges = (edges: Edge[]): StructuredEdge[] => {
+
     return edges.map(edge => {
         const newEdge: StructuredEdge = {
             id: edge.node.id,
@@ -21,12 +22,12 @@ export const getStructuredEdges = (edges: Edge[]): StructuredEdge[] => {
     });
 }
 
-export const fetchDataFromArweave = async (query: string) => {
+export const fetchDataFromArweave = async (query: string, prevId: string | undefined) => {
     try {
         let res = await axios.post("https://arweave.net/graphql", {
             query: query
         })
-        let { pageInfo, edges } = res.data.data.transactions
+        let { pageInfo, edges }: { pageInfo: any, edges: Edge[] } = res.data.data.transactions
         while (pageInfo.hasNextPage) {
             const cursor = edges[edges.length - 1].cursor;
             const newQuery = getDataQuery(cursor)
@@ -50,19 +51,27 @@ export const fetchDataFromArweave = async (query: string) => {
         });
 
         // const finalArray: any[] = filterObjectsByTimestamp(uniqueArray, 2) // 2 is maximum age in minutes
-        const finalArray = uniqueArray
 
-        if (finalArray.length) { // check if there is a new data
+        if (!prevId) return {
+            result: true,
+            data: uniqueArray,
+            id: uniqueArray[uniqueArray.length - 1].node.id
+        }
+        const index = uniqueArray.findIndex(obj => obj.node.id === prevId);
+        if (index === -1) throw "Previous Id not found in the array. Which is not possible."
+        const finalArray = uniqueArray.slice(index + 1);
+
+        if (finalArray.length > 0) {
             return {
                 result: true,
-                data: uniqueArray,
-                cursor: edges[edges.length - 1].cursor
-            }
-        }
-
-        return {
-            result: false,
-            data: uniqueArray,
+                data: finalArray,
+                id: finalArray[finalArray.length - 1].node.id
+            };
+        } else {
+            return {
+                result: false,
+                data: uniqueArray
+            };
         }
     } catch (error) {
         if (axios.isAxiosError(error)) {
