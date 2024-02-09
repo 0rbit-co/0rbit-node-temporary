@@ -1,0 +1,10 @@
+version: "3.4"
+
+services:
+  orbit-node:
+    build:
+      context: .
+      target: prod
+
+    ports:
+      - 4001:4001

@@ -27,13 +27,14 @@ export const fetchAndSendData = async (edges: StructuredEdge[]) => {
                     });
                 }
 
+                console.info("Fetching url: ", url)
                 const { headers, data } = await axios.get(url);
 
                 const messageData = {
                     process: processId || '4meJi6y2GrT1waJOfVIIonb23G72brFWYWevkSk1ipE',
                     signer: createDataItemSigner(WALLET_FILE),
-                    tags: [{ name: "Action", value: "Receive-data-feed" }, { name: "Content-Type", value: headers['content-type'] }],
-                    data: headers['content-type'].includes('application/json') ? JSON.stringify(data) : data
+                    tags: [{ name: "Action", value: "Receive-data-feed" }, { name: "Content-Type", value: headers['content-type'] || 'text/html' }],
+                    data: headers['content-type'] && headers['content-type'].includes('application/json') ? JSON.stringify(data) : String(data)
                 };
                 return message(messageData);
             } catch (error) {

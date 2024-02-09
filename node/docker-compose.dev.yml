@@ -1,0 +1,13 @@
+version: "3.4"
+
+services:
+  orbit-node-dev:
+    build:
+      context: .
+      target: build
+    volumes:
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 4005:4001
+    command: yarn run dev

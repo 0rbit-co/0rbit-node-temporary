@@ -24,9 +24,9 @@ if (validateEnvironmentVariables()) {
     });
     cron.schedule('*/30 * * * * *', async () => {
         try {
-            console.info("Cron job triggered")
+            console.info("Cron job triggered");
             await cronForDataFeed();
-            console.info("Cron job completed")
+            console.info("Cron job completed");
         } catch (error) {
             console.error('An error occurred in the cron job:', error)
         }

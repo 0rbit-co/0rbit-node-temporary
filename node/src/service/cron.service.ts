@@ -11,7 +11,7 @@ export const cronForDataFeed = async () => {
         const { result, data, id } = await fetchDataFromArweave(query, prevId)
 
         if (!result) throw "No new Edges to process";
-        const structuredEdges = getStructuredEdges(data)
+        const structuredEdges = getStructuredEdges(data);
 
         const msgIds: any[] = await fetchAndSendData(structuredEdges);
         if (file.id !== id) saveDataToFile({ id })
