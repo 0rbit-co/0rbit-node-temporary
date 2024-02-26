@@ -7,6 +7,7 @@ interface Node {
     id: string;
     block: any; // Adjust type as needed
     tags: Tag[];
+    bundledIn: { id: string };
 }
 
 
@@ -19,4 +20,9 @@ export interface StructuredEdge {
     id: string;
     block: any; // Adjust type as needed
     tags: { [key: string]: string };
+    bundledIn: { id: string };
+}
+
+export interface GroupedEdge {
+    [key: string]: StructuredEdge[]
 }

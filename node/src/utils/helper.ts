@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Edge, StructuredEdge } from "../types/utils.types";
+import { Edge, GroupedEdge, StructuredEdge } from "../types/utils.types";
 import { getDataQuery } from "../constants/query";
 
 
@@ -9,7 +9,8 @@ export const getStructuredEdges = (edges: Edge[]): StructuredEdge[] => {
         const newEdge: StructuredEdge = {
             id: edge.node.id,
             block: edge.node.block,
-            tags: {} // Initialize an empty object to store the converted tags
+            tags: {}, // Initialize an empty object to store the converted tags
+            bundledIn: { id: "" }
         };
 
         if (Array.isArray(edge.node.tags)) {
@@ -20,6 +21,29 @@ export const getStructuredEdges = (edges: Edge[]): StructuredEdge[] => {
 
         return newEdge;
     });
+}
+
+export const groupStructuredEdgesByTagName = (edges: StructuredEdge[], tageName: string): GroupedEdge => {
+    const groupedEdge: GroupedEdge = {
+        'Get-Data': [],
+        'Post-Data': []
+    };
+
+    edges.forEach(item => {
+        const tag = item.tags[tageName];
+        if (!tag) return
+        if (!groupedEdge[tag]) {
+            groupedEdge[tag] = [];
+        }
+        groupedEdge[tag].push(item);
+    });
+
+    return groupedEdge;
+
+}
+export function isValidUrl(url: string): boolean {
+    const pattern: RegExp = /^(ftp|http|https):\/\/[^ "]+$/;
+    return pattern.test(url);
 }
 
 export const fetchDataFromArweave = async (query: string, prevId: string | undefined) => {

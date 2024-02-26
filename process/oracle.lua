@@ -12,6 +12,7 @@ Handlers.add(
             Target = NodeWallet,
             Tags = {
                 Action = "Get-Data",
+                Service = "0rbit",
                 Url = url,
                 Recipient = from
             }
@@ -22,11 +23,49 @@ Handlers.add(
             Recipient = from,
             Target = NodeWallet
         })
-        Handlers.utils.reply("Recieved request from" .. from .. " to " .. url)(Msg)
+        Handlers.utils.reply("Recieved get request from" .. from .. " to " .. url)(Msg)
+    end
+)
+Handlers.add(
+    "postData",
+    Handlers.utils.hasMatchingTag("Action", "Post-Real-Data"),
+    function(Msg)
+        if not Log then Log = {} end
+        local url = Msg.Tags.Url
+        local from = Msg.From
+        local body = Msg.Body
+        print(url .. "   from:" .. from .. "   to")
+        assert(type(url) == "string", "Url to fetch data is required")
+        ao.send({
+            Target = NodeWallet,
+            Tags = {
+                Action = "Post-Data",
+                Service = "0rbit",
+                Url = url,
+                Recipient = from,
+                RequestBody = body
+            }
+        })
+        table.insert(Log, {
+            Message = "Request orbit node to post url.",
+            Url = url,
+            Recipient = from,
+            Target = NodeWallet
+        })
+        Handlers.utils.reply("Recieved post request from" .. from .. " to " .. url)(Msg)
     end
 )
 Send({
-    Target = "-o7N0dtFKGZpnitaM7WpKHo6uwZ8KUarugK7RABQmrM",
+    Target = "WSXUI2JjYUldJ7CKq9wE1MGwXs-ldzlUlHOQszwQe0s",
     Action = "Get-Real-Data",
     Url = "https://dummyjson.com/products"
+})
+local json = require("json")
+Send({
+    Target = "WSXUI2JjYUldJ7CKq9wE1MGwXs-ldzlUlHOQszwQe0s",
+    Action = "Post-Real-Data",
+    Url = "https://dummyjson.com/products/add",
+    Body = json.encode({
+        title = "BMW Pencil"
+    })
 })

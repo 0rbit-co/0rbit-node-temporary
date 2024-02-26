@@ -1,8 +1,4 @@
 import { PORT, validateEnvironmentVariables } from './constants/vars';
-import { fetchDataFromArweave, getStructuredEdges } from './utils/helper';
-import { getDataQuery } from './constants/query';
-import { getDataFromFile, saveDataToFile } from './utils/fileSystem';
-import { fetchAndSendData } from './service/data.service';
 import cron from 'node-cron';
 
 

@@ -1,6 +1,6 @@
 import { getDataQuery } from "../constants/query";
 import { getDataFromFile, saveDataToFile } from "../utils/fileSystem";
-import { fetchDataFromArweave, getStructuredEdges } from "../utils/helper";
+import { fetchDataFromArweave, getStructuredEdges, groupStructuredEdgesByTagName } from "../utils/helper";
 import { fetchAndSendData } from "./data.service";
 
 export const cronForDataFeed = async () => {
@@ -12,8 +12,10 @@ export const cronForDataFeed = async () => {
 
         if (!result) throw "No new Edges to process";
         const structuredEdges = getStructuredEdges(data);
+        const groupedEdges = groupStructuredEdgesByTagName(structuredEdges, "Action")
+        console.log(groupedEdges)
 
-        const msgIds: any[] = await fetchAndSendData(structuredEdges);
+        const msgIds: any[] = await fetchAndSendData(groupedEdges);
         if (file.id !== id) saveDataToFile({ id })
 
         console.info(msgIds);
