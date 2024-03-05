@@ -1,4 +1,4 @@
-local orbit = { _version = "0.0.1", process = " WSXUI2JjYUldJ7CKq9wE1MGwXs-ldzlUlHOQszwQe0s" }
+local orbit = { _version = "0.0.1", process = "WSXUI2JjYUldJ7CKq9wE1MGwXs-ldzlUlHOQszwQe0s" }
 
 function orbit.get(url)
     if type(url) ~= "string" then

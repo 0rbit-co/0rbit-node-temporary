@@ -1,4 +1,5 @@
 NodeWallet = "_186uLmdemgvCaHJ-eHrdrCSPEOU4AWeLr5sHTd7g7M"
+_VERSION = "0.0.1"
 Handlers.add(
     "getData",
     Handlers.utils.hasMatchingTag("Action", "Get-Real-Data"),
