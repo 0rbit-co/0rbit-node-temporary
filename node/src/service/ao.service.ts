@@ -1,9 +1,8 @@
-import { message } from "@permaweb/ao-connect";
 import { isValidUrl } from "../utils/helper";
-import { createDataItemSigner } from "@permaweb/ao-connect";
 import { WALLET_FILE } from "../constants/vars";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { StructuredEdge } from "../types/utils.types";
+import { createDataItemSigner, message } from "@permaweb/aoconnect";
 
 
 export const processData = async (item: StructuredEdge) => {
@@ -52,13 +51,16 @@ export const processData = async (item: StructuredEdge) => {
     } catch (error) {
         if (axios.isAxiosError(error)) {
             const res: AxiosError = error;
+            console.log("Error res:", res.cause, res.toJSON())
+            const tags = [{ name: "Action", value: "Receive-data-feed" }, { name: "Status", value: `${res?.status}` }, { name: "Content-Type", value: 'application/json' }, { name: "Msg", value: `${res.message}` }]
+            if (res.response) {
+                tags.push({ name: "Code", value: `${res.response?.status}` })
+            }
             const messageData = {
                 process: processId || '4meJi6y2GrT1waJOfVIIonb23G72brFWYWevkSk1ipE',
                 signer: createDataItemSigner(WALLET_FILE),
-                tags: [{ name: "Action", value: "Receive-data-feed" }, { name: "Status", value: `${res.status}` }, { name: "Code", value: `${res.response.status}` }, {
-                    name: "Content-Type", value: 'application/json'
-                }],
-                data: JSON.stringify(res.message)
+                tags: tags,
+                data: JSON.stringify(res.response ? res.response.data : res.message)
             };
             return message(messageData);
         }
