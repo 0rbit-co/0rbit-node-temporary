@@ -14,7 +14,7 @@ export const processData = async (item: StructuredEdge) => {
     try {
 
         if (!isValidUrl(url)) {
-            return message({
+            return await message({
                 process: processId || '4meJi6y2GrT1waJOfVIIonb23G72brFWYWevkSk1ipE',
                 signer: createDataItemSigner(WALLET_FILE),
                 tags: [{ name: "Action", value: "Receive-data-feed" }, { name: "Content-Type", value: "text/html" }],
@@ -27,7 +27,7 @@ export const processData = async (item: StructuredEdge) => {
             const body = item.tags['RequestBody']
 
             if (action === 'Post-Data' && !body) {
-                return message({
+                return await message({
                     process: processId || '4meJi6y2GrT1waJOfVIIonb23G72brFWYWevkSk1ipE',
                     signer: createDataItemSigner(WALLET_FILE),
                     tags: [{ name: "Action", value: "Receive-data-feed" }, { name: "Content-Type", value: "text/html" }],
@@ -47,7 +47,7 @@ export const processData = async (item: StructuredEdge) => {
             tags: [{ name: "Action", value: "Receive-data-feed" }, { name: "Status", value: `${status}` }, { name: "Content-Type", value: headers['content-type'] || 'text/html' }],
             data: headers['content-type'] && headers['content-type'].includes('application/json') ? JSON.stringify(data) : String(data)
         };
-        return message(messageData);
+        return await message(messageData);
     } catch (error) {
         if (axios.isAxiosError(error)) {
             const res: AxiosError = error;
@@ -62,9 +62,16 @@ export const processData = async (item: StructuredEdge) => {
                 tags: tags,
                 data: JSON.stringify(res.response ? res.response.data : res.message)
             };
-            return message(messageData);
+            return await message(messageData);
         }
-        throw error
+        console.error(`>>>>>>>>>>>>>>>>>>>>>>>>>>>>Error:`, error)
+        const messageData = {
+            process: processId || '4meJi6y2GrT1waJOfVIIonb23G72brFWYWevkSk1ipE',
+            signer: createDataItemSigner(WALLET_FILE),
+            tags: [{ name: "Action", value: "Receive-data-feed" }, { name: "Status", value: `FAILED` }, { name: "Content-Type", value: 'application/json' }, { name: "Msg", value: `Error occured. Please contact the team` }],
+            data: JSON.stringify("Unable to process the request.")
+        };
+        return await message(messageData);
     }
 };
 
