@@ -44,20 +44,20 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@permaweb/ao-scheduler-utils@~0.0.7":
-  version "0.0.12"
-  resolved "https://registry.yarnpkg.com/@permaweb/ao-scheduler-utils/-/ao-scheduler-utils-0.0.12.tgz#2584f807d13c96e4fd449b928450885a1e2652c5"
-  integrity sha512-oDB4mc+Q6j7ysI5BY/M5dNcaD/q7hWJUaMdw7xQLtJjSp5CX7jgvN8Zx6H9ZocTclvnLh0/rANYIjay/lVPe7g==
+"@permaweb/ao-scheduler-utils@~0.0.13":
+  version "0.0.15"
+  resolved "https://registry.yarnpkg.com/@permaweb/ao-scheduler-utils/-/ao-scheduler-utils-0.0.15.tgz#f47870a884f0832c1ce808fa2e366ca5579d61a9"
+  integrity sha512-Ef3IGP08E6KgcwX/AUq3k9gj7W/5GylEZRwXbXwC1JYl5FoHegdGAy0gDJYKHO1Nf4NVNFicb1xBaDeU0Ic7og==
   dependencies:
-    lru-cache "^10.1.0"
+    lru-cache "^10.2.0"
     ramda "^0.29.1"
 
-"@permaweb/aoconnect@^0.0.45":
-  version "0.0.45"
-  resolved "https://registry.yarnpkg.com/@permaweb/aoconnect/-/aoconnect-0.0.45.tgz#5bf08e68912c665358d2e4e8c73c3def2018ae62"
-  integrity sha512-cwhhjBNQO9PpvnDKbRr28ExD+nu+cSTROpkTRX+yDaKbRTVfo3MgIdt4E/fotA87NsMeQd6BVtRExtvsBSE78Q==
+"@permaweb/aoconnect@^0.0.48":
+  version "0.0.48"
+  resolved "https://registry.yarnpkg.com/@permaweb/aoconnect/-/aoconnect-0.0.48.tgz#432ddfe7f0eaa4c37a6869ac976960d58c5ae7c0"
+  integrity sha512-CldwoE+6STKrfvknnmozRDBlo5gSHXLhmfAtAqHZvbMRprZ3yk+N3OIAt8La5axQ8Rwte5KKRcltvrNyxZpsVA==
   dependencies:
-    "@permaweb/ao-scheduler-utils" "~0.0.7"
+    "@permaweb/ao-scheduler-utils" "~0.0.13"
     buffer "^6.0.3"
     debug "^4.3.4"
     hyper-async "^1.1.2"
@@ -842,7 +842,7 @@ jackspeak@^2.3.5:
   optionalDependencies:
     "@pkgjs/parseargs" "^0.11.0"
 
-lru-cache@^10.1.0, "lru-cache@^9.1.1 || ^10.0.0":
+lru-cache@^10.2.0, "lru-cache@^9.1.1 || ^10.0.0":
   version "10.2.0"
   resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-10.2.0.tgz#0bd445ca57363465900f4d1f9bd8db343a4d95c3"
   integrity sha512-2bIM8x+VAf6JT4bKAljS1qUWgMsqZRPGJS6FSahIMPVvctcNhyVp7AJu7quxOW9jwkryBReKZY5tY5JYv2n/7Q==

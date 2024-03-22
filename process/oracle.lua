@@ -59,7 +59,7 @@ Handlers.add(
 Send({
     Target = "WSXUI2JjYUldJ7CKq9wE1MGwXs-ldzlUlHOQszwQe0s",
     Action = "Get-Real-Data",
-    Url = "https://dummyjson.com/products"
+    Url = "https://api.arns.app/v1/contract/bLAgYxAdX2Ry-nt6aH2ixgvJXbpsEYm28NgJgyqfs-U/records/blackjack"
 })
 local json = require("json")
 Send({

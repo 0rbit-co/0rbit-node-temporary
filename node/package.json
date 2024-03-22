@@ -13,7 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@permaweb/aoconnect": "^0.0.45",
+    "@permaweb/aoconnect": "^0.0.48",
     "axios": "^1.6.7",
     "dotenv": "^16.4.1",
     "express": "^4.18.2",
